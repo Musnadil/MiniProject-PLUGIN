@@ -4,61 +4,47 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pluginrealm.adapter.user_adapter
-import com.example.pluginrealm.model.user
-import com.example.pluginrealm.view_data
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.pluginrealm.adapter.notes_adapter
+import com.example.pluginrealm.model.Notes
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
-import io.realm.exceptions.RealmException
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_view_data.*
+import io.realm.RealmResults
+
 
 class MainActivity : AppCompatActivity() {
-    lateinit var useradapter: user_adapter
-    lateinit var data:Realm
-    val lm = LinearLayoutManager(this)
+    private lateinit var btn_createNotes: FloatingActionButton
+    private lateinit var rv_notes: RecyclerView
+    private lateinit var notesList: ArrayList<Notes>
+    private lateinit var realm: Realm
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        tambah()
-//        initview()
 
-        btn_show.setOnClickListener {
-            startActivity(Intent(this,view_data::class.java))
-        }
-        }
-    private fun getAllUser(){
-        data.where(user::class.java).findAll().let {
-            useradapter.setUser(it)
-        }
+        //init views
+        realm = Realm.getDefaultInstance()
+        btn_createNotes = findViewById(R.id.btn_createNotes)
+        rv_notes = findViewById(R.id.rv_notes)
+
+        //on click btn_createNotes
+         btn_createNotes.setOnClickListener {
+             startActivity(Intent(this,AddNotesActivity::class.java))
+             finish()
+         }
+
+        rv_notes.layoutManager=LinearLayoutManager(this)
+        getAllNotes()
+
     }
-//    private fun initview(){
-//        show.layoutManager = lm
-//        useradapter = user_adapter(this)
-//        show.adapter = useradapter
-//        Realm.init(applicationContext)
-//        data= Realm.getDefaultInstance()
-//        getAllUser()
-//    }
-    fun tambah(){
-        btn_add.setOnClickListener {
-            data.beginTransaction()
-            var count = 0
-            data.where(user::class.java).findAll().let{
-                for(i in it){
-                    count++
-                }
-            }
-            try{
-                var User = data.createObject(user::class.java)
-                User.setId(count+1)
-                User.setNama_barang(et_barang.text.toString())
-                User.setHarga(et_harga.text.toString().toInt())
-                et_barang.setText("")
-                et_harga.setText("")
-                data.commitTransaction()
-                getAllUser()
-            }catch (e:RealmException){
-            }
-        }
+
+    private fun getAllNotes() {
+
+        notesList = ArrayList()
+        val result:RealmResults<Notes> = realm.where<Notes>(Notes::class.java).findAll()
+        rv_notes.adapter=notes_adapter(this,result)
+        rv_notes.adapter!!.notifyDataSetChanged()
+
+
     }
 }

@@ -24,9 +24,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    realm{
-        syncEnabled = true
-    }
+
 }
 
 dependencies {
