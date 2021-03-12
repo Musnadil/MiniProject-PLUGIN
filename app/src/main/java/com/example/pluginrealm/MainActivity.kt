@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         rv_notes.layoutManager = lm
         adapternotes = notes_adapter(mutableListOf(),object: notes_adapter.onAdapterClick{
             override fun onClick(note: Notes) {
-                startActivity(Intent(this@MainActivity,AddNotesActivity::class.java)
+                startActivity(Intent(this@MainActivity,Update_DeleteNotesActivity::class.java)
                     .putExtra("id",note.getID())
                     .putExtra("judul",note.getJudul())
                     .putExtra("deskripsi",note.getDeskripsi()))

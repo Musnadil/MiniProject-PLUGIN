@@ -29,32 +29,32 @@
             android:maxLines="5"
             />
         <Button
-            android:id="@+id/btn_save"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:text="Save Notes"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/futuraheavy"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/white"
-            />
-        <Button
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="Update Notes"
             android:fontFamily="@font/futuraheavy"
             android:backgroundTint="@color/abu_disable"
             android:textColor="@color/white"
             android:clickable="false"
             />
         <Button
+            android:id="@+id/btn_update"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Update Notes"
+            android:fontFamily="@font/futuraheavy"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/btn_delete"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:text="Delete Notes"
             android:fontFamily="@font/futuraheavy"
-            android:backgroundTint="@color/red_disable"
+            android:backgroundTint="@color/red"
             android:textColor="@color/white"
-            android:clickable="false"
             />
 
 

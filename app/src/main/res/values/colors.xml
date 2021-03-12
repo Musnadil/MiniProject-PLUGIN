@@ -7,6 +7,8 @@
     <color name="black">#000000</color>
     <color name="blue">#2196F3</color>
     <color name="red">#FF0000</color>
+    <color name="red_disable">#80FF0000</color>
+    <color name="abu_disable">#803A3A3A</color>
     <color name="transparan">#00FFFFFF</color>
     <color name="whitetrans">#CCFFFFFF</color>
 </resources>

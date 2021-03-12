@@ -14,9 +14,6 @@ class AddNotesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_notes)
         setUpRealm()
         addNotesToDB()
-        getDataIntent()
-        update()
-        delete()
 
     }
 
@@ -34,37 +31,9 @@ class AddNotesActivity : AppCompatActivity() {
             realm.commitTransaction()
         }
     }
-    private fun delete(){
-        btn_delete.setOnClickListener {
-            realm.beginTransaction()
-            realm.where(Notes::class.java).equalTo("id",intent.getIntExtra("id",1)).findFirst().let {
-                it!!.deleteFromRealm()
-            }
-            realm.commitTransaction()
-            startActivity(Intent(this,MainActivity::class.java))
-        }
-
-    }
-
-    private fun update(){
-        btn_update.setOnClickListener {
-            realm.beginTransaction()
-            realm.where(Notes::class.java).equalTo("id",intent.getIntExtra("id",1)).findFirst().let{
-                it!!.setJudul(et_judul.text.toString())
-                it!!.setDeskripsi(et_deskripsi.text.toString())
-            }
-            realm.commitTransaction()
-            startActivity(Intent(this,MainActivity::class.java))
-        }
-    }
-
     private fun setUpRealm(){
         realm = Realm.getDefaultInstance()
     }
-    private fun getDataIntent(){
-        et_judul.setText((intent.getStringExtra("judul")))
-        et_deskripsi.setText((intent.getStringExtra("deskripsi")))
 
-    }
 
 }
