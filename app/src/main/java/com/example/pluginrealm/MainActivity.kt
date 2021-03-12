@@ -11,40 +11,47 @@ import com.example.pluginrealm.model.Notes
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.RealmResults
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var btn_createNotes: FloatingActionButton
-    private lateinit var rv_notes: RecyclerView
-    private lateinit var notesList: ArrayList<Notes>
-    private lateinit var realm: Realm
+    private lateinit var adapternotes:notes_adapter
+    private lateinit var realm : Realm
+    val lm = LinearLayoutManager(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //init views
-        realm = Realm.getDefaultInstance()
-        btn_createNotes = findViewById(R.id.btn_createNotes)
-        rv_notes = findViewById(R.id.rv_notes)
-
-        //on click btn_createNotes
-         btn_createNotes.setOnClickListener {
-             startActivity(Intent(this,AddNotesActivity::class.java))
-             finish()
-         }
-
-        rv_notes.layoutManager=LinearLayoutManager(this)
-        getAllNotes()
-
+        createNotes()
+        initView()
+        getAllnote()
+    }
+    fun createNotes(){
+        btn_createNotes.setOnClickListener {
+            startActivity(Intent(this,AddNotesActivity::class.java))
+            finish()
+        }
     }
 
-    private fun getAllNotes() {
 
-        notesList = ArrayList()
-        val result:RealmResults<Notes> = realm.where<Notes>(Notes::class.java).findAll()
-        rv_notes.adapter=notes_adapter(this,result)
-        rv_notes.adapter!!.notifyDataSetChanged()
+    private fun getAllnote() {
+        realm.where(Notes::class.java).findAll().let {
+            adapternotes.setNotes(it)
+        }
+    }
 
-
+    private fun initView(){
+        rv_notes.layoutManager = lm
+        adapternotes = notes_adapter(mutableListOf(),object: notes_adapter.onAdapterClick{
+            override fun onClick(note: Notes) {
+                startActivity(Intent(this@MainActivity,AddNotesActivity::class.java)
+                    .putExtra("id",note.getID())
+                    .putExtra("judul",note.getJudul())
+                    .putExtra("deskripsi",note.getDeskripsi()))
+            }
+        })
+        rv_notes.adapter = adapternotes
+        Realm.init(applicationContext)
+        realm = Realm.getDefaultInstance()
+        getAllnote()
     }
 }

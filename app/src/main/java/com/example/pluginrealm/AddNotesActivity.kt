@@ -3,75 +3,68 @@ package com.example.pluginrealm
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import com.example.pluginrealm.model.Notes
 import io.realm.Realm
-import java.lang.Exception
+import kotlinx.android.synthetic.main.activity_add_notes.*
 
 class AddNotesActivity : AppCompatActivity() {
-
-    private lateinit var judulET:EditText
-    private lateinit var deskripsiET:EditText
-    private lateinit var saveBTN:Button
     private lateinit var realm: Realm
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_notes)
-
-        //init views
-        realm = Realm.getDefaultInstance()
-        judulET=findViewById(R.id.et_judul)
-        deskripsiET=findViewById(R.id.et_deskripsi)
-        saveBTN=findViewById(R.id.btn_save)
-
-        // onClicklistener
-
-        saveBTN.setOnClickListener {
-            addNotesToDB()
-        }
+        setUpRealm()
+        addNotesToDB()
+        getDataIntent()
+        update()
+        delete()
 
     }
 
     private fun addNotesToDB() {
-
-        try {
-            // Auto increment ID
+        btn_save.setOnClickListener {
             realm.beginTransaction()
-            val currentIdNumber : Number? = realm.where(Notes::class.java).max("id")
-            val nextID : Int
-
-            nextID=if(currentIdNumber == null){
-                1
-            }else{
-                currentIdNumber.toInt()+1
-            }
-
-
-            val notes = Notes()
-
-            notes.judul = judulET.text.toString()
-            notes.deskripsi = deskripsiET.text.toString()
-            notes.id = nextID
-
-
-            //copy to realm
-            realm.copyToRealmOrUpdate(notes)
-            realm.commitTransaction()
-
-
-            Toast.makeText(this,"Notes telah ditambahkan",Toast.LENGTH_SHORT).show()
-
-            startActivity(Intent(this,MainActivity::class.java))
+            var currentId = realm.where(Notes::class.java).max("id")
+            var nextId = if (currentId == null) 1 else currentId.toInt() + 1
+            var notes = realm.createObject(Notes::class.java)
+            notes.setId(nextId)
+            notes.setJudul(et_judul.text.toString())
+            notes.setDeskripsi(et_deskripsi.text.toString())
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
-
-
-        }catch (e:Exception){
-            Toast.makeText(this,"Failed $e",Toast.LENGTH_SHORT).show()
+            realm.commitTransaction()
+        }
+    }
+    private fun delete(){
+        btn_delete.setOnClickListener {
+            realm.beginTransaction()
+            realm.where(Notes::class.java).equalTo("id",intent.getIntExtra("id",1)).findFirst().let {
+                it!!.deleteFromRealm()
+            }
+            realm.commitTransaction()
+            startActivity(Intent(this,MainActivity::class.java))
         }
 
+    }
+
+    private fun update(){
+        btn_update.setOnClickListener {
+            realm.beginTransaction()
+            realm.where(Notes::class.java).equalTo("id",intent.getIntExtra("id",1)).findFirst().let{
+                it!!.setJudul(et_judul.text.toString())
+                it!!.setDeskripsi(et_deskripsi.text.toString())
+            }
+            realm.commitTransaction()
+            startActivity(Intent(this,MainActivity::class.java))
+        }
+    }
+
+    private fun setUpRealm(){
+        realm = Realm.getDefaultInstance()
+    }
+    private fun getDataIntent(){
+        et_judul.setText((intent.getStringExtra("judul")))
+        et_deskripsi.setText((intent.getStringExtra("deskripsi")))
 
     }
+
 }

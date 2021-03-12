@@ -1,6 +1,5 @@
 package com.example.pluginrealm.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pluginrealm.R
 import com.example.pluginrealm.model.Notes
-import io.realm.RealmResults
-import kotlinx.android.synthetic.main.notes_rv_layout.view.*
 
-class notes_adapter(private val context: Context?, private val notesList: RealmResults<Notes>)
-    :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class notes_adapter(private val notesList: MutableList<Notes>,private val listener: notes_adapter.onAdapterClick)
+    : RecyclerView.Adapter<notes_adapter.ViewHolder>(){
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.notes_rv_layout,parent,false)
-
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.notes_rv_layout,parent,false))
 
     }
 
@@ -27,18 +20,32 @@ class notes_adapter(private val context: Context?, private val notesList: RealmR
         return notesList.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-        holder.itemView.tv_judul.text = notesList[position]!!.judul
-        holder.itemView.tv_deskripsi.text = notesList[position]!!.deskripsi
-        holder.itemView.tv_id.text = notesList[position]!!.id.toString()
-
+    override fun onBindViewHolder(holder: notes_adapter.ViewHolder, position: Int) {
+        holder.bind(notesList[position])
+        holder.itemView.setOnClickListener{
+            listener.onClick(notesList[position])
+        }
     }
 
-    class ViewHolder(v:View?):RecyclerView.ViewHolder(v!!){
-        val judul = itemView.findViewById<TextView>(R.id.tv_judul)
-        val deskripsi = itemView.findViewById<TextView>(R.id.tv_deskripsi)
-        val id = itemView.findViewById<TextView>(R.id.tv_id)
+    fun setNotes(data:List<Notes>){
+        notesList.clear()
+        notesList.addAll(data)
+        notifyDataSetChanged()
     }
 
+    inner class ViewHolder(v:View):RecyclerView.ViewHolder(v){
+
+        val tvId: TextView = v.findViewById(R.id.tv_id)
+        val tvJudul: TextView = v.findViewById(R.id.tv_judul)
+        val tvDeskripsi: TextView = v.findViewById(R.id.tv_deskripsi)
+
+        fun bind(n:Notes){
+            tvId.text = n.getID().toString()
+            tvJudul.text = n.getJudul()
+            tvDeskripsi.text = n.getDeskripsi()
+        }
+    }
+    interface onAdapterClick{
+        fun onClick(note:Notes)
+    }
 }

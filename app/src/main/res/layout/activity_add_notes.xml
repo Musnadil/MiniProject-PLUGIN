@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -35,5 +36,25 @@
             android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/white"
             />
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Update Notes"
+            android:fontFamily="@font/futuraheavy"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Delete Notes"
+            android:fontFamily="@font/futuraheavy"
+            android:backgroundTint="@color/red"
+            android:textColor="@color/white"
+            />
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
