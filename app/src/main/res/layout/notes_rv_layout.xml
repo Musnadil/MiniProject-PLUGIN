@@ -11,6 +11,7 @@
     android:layout_marginTop="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
+    app:cardBackgroundColor="@color/whitetrans"
     >
 
     <RelativeLayout
@@ -39,12 +40,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-
             android:text="Ini deskripsi ya kawan kawanku sekalian"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_below="@id/tv_judul"
-            />
+            android:maxLines="5"/>
 
         <TextView
             android:id="@+id/tv_id"

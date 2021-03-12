@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     fun createNotes(){
         btn_createNotes.setOnClickListener {
             startActivity(Intent(this,AddNotesActivity::class.java))
-            finish()
         }
     }
 
